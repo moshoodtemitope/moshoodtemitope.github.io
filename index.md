@@ -1,6 +1,7 @@
 ---
 layout: default
 ---
+<link rel="shortcut icon" type="image/png" href="/logo.png">
 
 Text can be **bold**, _italic_, or ~~strikethrough~~.
 
