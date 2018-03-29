@@ -4,7 +4,7 @@
 	<title>Hank Quinlan's Blog</title>
 	<link href="http://moshoodtemitope.github.io/writing/atom.xml" rel="self"/>
 	<link href="http://moshoodtemitope.github.io/atom"/>
-	<updated>2018-03-29T09:39:30+01:00</updated>
+	<updated>2018-03-29T09:48:03+01:00</updated>
 	<id>http://moshoodtemitope.github.io/atom</id>
 	<author>
 		<name>Moshood Temitope</name>
@@ -15,7 +15,7 @@
 		<entry>
 			<title>The art of Javascript Async-Await </title>
 			<link href="http://moshoodtemitope.github.io/blog/art-of-async-await"/>
-			<updated>2017-11-12T00:00:00+01:00</updated>
+			<updated>2018-03-29T00:00:00+01:00</updated>
 			<id>http://moshoodtemitope.github.io/blog/art-of-async-await</id>
 			<content type="html">&lt;p&gt;
     Javascript by default is &lt;em&gt; single threaded &lt;/em&gt;(one line of code executes at a time), the script is executed in the order in which the lines of codes appear. This flow comes with several limitations. For instance, we have a basic snippet below: 
