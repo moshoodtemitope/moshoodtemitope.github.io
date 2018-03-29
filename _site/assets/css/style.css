@@ -472,6 +472,7 @@ footer { clear: both; }
 .post-footer .author-photo { width: 35px; height: 35px; }
 
 .post-excerpt-heading h2 { margin-bottom: 0; }
+@media screen and (max-width: 642px) { .post-excerpt-heading h2 { line-height: 1.2; } }
 
 .about-me-wrap .main-page-header { background: #2471A3; color: #fff; }
 
@@ -524,6 +525,8 @@ figure.highlight { background-color: #f8f8f8; margin: 1em 0; }
 .post-content-wrap pre code, .post-content-wrap pre tt { display: block; max-width: initial; padding: 0; margin: 0; overflow: initial; line-height: inherit; word-wrap: normal; background-color: transparent; border: 0; }
 
 .post-content-wrap pre > code, .post-content-wrap code { padding: 0; margin: 0; font-size: 14px; font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace; color: #ffffff; word-break: normal; white-space: pre; background: transparent; border: 0; padding: 2px 4px; border-radius: 0.3rem; }
+
+@media screen and (max-width: 768) { .post-content-wrap pre > code, .post-content-wrap .highlight code span { font-size: 15px; } }
 
 .post-content-wrap .highlight pre, .post-content-wrap pre { padding: 0.8rem; overflow: auto; font-size: 0.9rem; line-height: 1.45; border-radius: 0.3rem; -webkit-overflow-scrolling: touch; }
 

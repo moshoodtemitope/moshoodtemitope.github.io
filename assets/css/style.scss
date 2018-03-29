@@ -493,6 +493,9 @@ footer{
 // }
 .post-excerpt-heading h2{
     margin-bottom: 0;
+    @media screen and (max-width: 642px){
+        line-height: 1.2;
+    }
 }
 
 .about-me-wrap .main-page-header {
@@ -660,6 +663,12 @@ figure.highlight {
     border: 0;
     padding: 2px 4px;
     border-radius: 0.3rem;
+}
+.post-content-wrap pre>code,
+.post-content-wrap .highlight code span{
+    @media screen and (max-width: 768){
+        font-size: 15px;
+    }
 }
 
 // .post-content-wrap code {
