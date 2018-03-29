@@ -1,16 +1,14 @@
 theme: jekyll-theme-cayman
 title: Moshood Temitope
-description: Sharing knowledge about Front End development. All articles and researches are written by Moshood Temitope, a Front End Engineer, UI Designer, UX Researcher
-permalink: /blog/:title
+description: Sharing knowledge about Front End development. All articles and researches are written by Moshood Temitope, Front End Engineer, UI Designer, UX Researcher
+permalink: /writing/:year/:month/:day/:title
 twitter:
   username: moreshud15
 github_username: moshoodtemitope
 plugins:
   - jekyll-paginate
-paginate: 5
+paginate: 4
 paginate_path: "/page-:num/"
-tag_page_layout: tag_page
-tag_page_dir: tag
 defaults:
   -
     scope:

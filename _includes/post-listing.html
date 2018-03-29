@@ -1,0 +1,48 @@
+<div class="posts">
+{% for post in paginator.posts %}
+    <article class="post-excerpt">
+        <header class="post-excerpt-heading">
+            <h2>
+                <a href="{{ post.url }}" title="{{ post.title }}">
+                        {{ post.title }}
+                </a>
+            </h2>
+            <div class="post-excerpt-metainfo">
+                <span class="date-posted">{{ post.date | date_to_string }}
+                </span>
+                
+                    {% for tag in post.tags %}
+                    {% capture tag_name %}{{ tag }}{% endcapture %}
+                    {% if forloop.last == false %}
+                        <span class="post-tag">
+                            <!-- <a href="/tag/{{ tag_name }}">{{ tag_name }}</a> -->
+                            <a href="#">{{ tag_name }}</a>
+                        </span>,
+                    {% else %}
+                        <span class="post-tag">
+                            <!-- <a href="/tag/{{ tag_name }}">{{ tag_name }}</a> -->
+                            <a href="#">{{ tag_name }}</a>
+                        </span>
+                    {% endif %}
+                  {% endfor %}
+                
+            </div>
+        </header>
+        <div class="post-excerpt-content">
+            {{ post.content | markdownify | strip_html | truncatewords: 20 }}
+        </div>
+    </article>
+        
+{% endfor %}
+</div>
+
+<!-- Pagination links -->
+<div class="pagination">
+    {% if paginator.previous_page %}
+      <a href="{{ paginator.previous_page_path }}" class="previous">&larr; Older posts</a>
+    {% endif %}
+    <span class="page_number ">Page {{ paginator.page }} of {{ paginator.total_pages }}</span>
+    {% if paginator.next_page %}
+      <a href="{{ paginator.next_page_path }}" class="next">Newer posts &rarr;</a>
+    {% endif %}
+  </div>

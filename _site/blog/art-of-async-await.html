@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+        <meta charset="UTF-8">
+
+        
+        <title>Moshood Temitope - The art of Javascript Async-Await </title>
+
+        <meta name="description" content="Sharing knowledge about Front End development. All articles and researches are written by Moshood Temitope, a Front End Engineer, UI Designer, UX Researcher"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#2471A3">
+        <meta name="apple-mobile-web-app-title" content="Moshood Temitope">
+
+        <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/fav.png">
+
+        <meta name="msapplication-TileColor" content="#2471A3">
+        <meta name="msapplication-TileImage" content="/assets/images/fav.png">
+        <meta property="og:locale" content="en_US">
+        <meta property="og:site_name" content="Moshood Temitope" />
+        <style type="text/css">
+            
+            @media screen and (max-width: 640px){
+                
+            }
+            /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+            We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+        </style>
+    
+        
+        <meta property="og:type" content="article">
+        <link rel="canonical" href="http://localhost:4443/blog/art-of-async-await" />
+        <meta property="og:title" content="The art of Javascript Async-Await " />
+        <meta property="og:description" content="" />
+        <meta property="og:url" content="http://localhost:4443/blog/art-of-async-await" />
+        <meta property="article:published_time" content="12 Nov 2017" />
+        
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="The art of Javascript Async-Await " />
+        <meta name="twitter:description" content="" />
+        <meta name="twitter:url" content="http://localhost:4443/blog/art-of-async-await" />
+        <meta name="twitter:label1" content="Written by" />
+        <meta name="twitter:data1" content="Moshood Temitope" />
+        <meta name="twitter:site" content="@moreshud15" />
+        <meta name="twitter:creator" content="@moreshud15" />
+
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "Article",
+                "publisher": {
+                    "@type": "Organization",
+                    "name": "Moshood Temitope",
+                    "logo": "http://localhost:4443/assets/images/fav.png"
+                },
+                "author": {
+                    "@type": "Person",
+                    "name": "Moshood Temitope",
+                    "image": {
+                        "@type": "ImageObject",
+                        "url": "http://localhost:4443/assets/images/fav.png",
+                        "width": 700,
+                        "height": 666
+                    },
+                    "url": "http://localhost:4443/about",
+                    "sameAs": [
+                        "http://localhost:4443",
+                        "https://twitter.com/moreshud15"
+                    ]
+                },
+                "headline": "The art of Javascript Async-Await ",
+                "url": "http://localhost:4443/blog/art-of-async-await",
+                "datePublished": "12 Nov 2017",
+                "description": "",
+                "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": "http://localhost:4443"
+                }
+            }
+        </script>
+        
+    
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css?v=ae7070be06d2a674b761b06ab443a39e9381a7f5">
+    <link rel="shortcut icon" href="/assets/images/fav.png" >
+
+   
+    
+  </head>
+    
+        
+
+
+
+
+
+    
+  <body>
+    
+    <section class="main-page-header">
+      <div class="site-header">
+        <div class="my-fav">
+          <a href="/"> <img alt="" src="/assets/images/header-fav.png"></a>
+        </div>
+        
+        <nav class="main-nav">
+          <a href="/">Home</a>
+          <a href="/about/">About me</a>
+          <a href="/category/lets-build-series.html" class="lets-build">Let's Build Series</a>
+          <!-- <a href="/writing/" class="blog-link">Blog</a> -->
+        </nav>
+      </div>
+      
+      <div class="post-header">
+        <div class="title-of-post">
+          <h1>The art of Javascript Async-Await </h1>
+          <span class="list-post-tags">
+          <i class="fa fa-tags" aria-hidden="true"></i>
+          
+            
+              
+              
+                <!--<a href="/tag/javascript">javascript</a>-->
+                <a href="#">javascript</a>
+              
+            
+          
+        </span>
+        </div>
+        <div class="post-meta">
+          <div class="author-photo">
+              <img alt="" src="/assets/images/mrmosh.jpg">
+          </div>
+          <div class="author-and-date">
+              <h3><a href="/about"> Moshood Temitope</a></h3>
+              <span class="meta">12 Nov 2017</span> 
+              <span class="middle-dot">&middot;</span>
+              <span class="time-to-read">
+                  
+                  
+                    15 mins
+                 read
+              </span>
+          </div>
+          
+        </div>
+        
+      </div>
+    </section>
+    
+    <section class="post-content-wrap">
+      <div class="post">
+        <p>
+    Javascript by default is <em> single threaded </em>(one line of code executes at a time), the script is executed in the order in which the lines of codes appear. This flow comes with several limitations. For instance, we have a basic snippet below: 
+</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">const</span> <span class="nx">syncCode</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'This is line 1'</span><span class="p">);</span> <span class="c1">//line 1</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'This is line 2'</span><span class="p">);</span> <span class="c1">//line 2</span>
+<span class="p">}</span></code></pre></figure>
+
+<p> 
+    Synchronous means line 2 <em> cannot </em> start executing until after line 1 has finished executing. 
+</p>
+<h3 class="sub-section-title">A deeper illustration</h3>
+<p>
+    We need to execute a function <em>showUsers</em> only after the function <em>addUser</em>  has been successfully executed. While <em>addUser</em> is being executed, we want to be able to execute other portions of the script. A portion of the <em>showUsers</em> function depends on the <em>addUser</em> function.
+</p>
+<p>
+    The problem is that the function <em>addUser</em> could take some time before completely executing, while we <em>wait</em> for the result of <em>addUser</em>, we dont want other portions of the script to be blocked from executing. Also, we don't want the <em>showUsers</em> function generating unwanted results.
+</p>
+<p id="my-element">
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">let</span> <span class="nx">userData</span> <span class="o">=</span> <span class="p">[{</span><span class="na">name</span><span class="p">:</span> <span class="s1">'Karl Max'</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="na">profession</span><span class="p">:</span><span class="s1">'teacher'</span><span class="p">,</span> <span class="na">taxId</span><span class="p">:</span> <span class="s1">'e312'</span> <span class="p">}];</span>
+
+<span class="kd">const</span> <span class="nx">addUser</span> <span class="o">=</span> <span class="p">(</span><span class="nx">time</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span> <span class="c1">// wait 2500milliseconds then push a new object </span>
+        <span class="nx">userData</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="na">name</span><span class="p">:</span> <span class="s1">'Johhn Doe '</span><span class="p">,</span> 
+        <span class="na">age</span><span class="p">:</span> <span class="mi">44</span><span class="p">,</span> <span class="na">profession</span><span class="p">:</span> <span class="s1">'doctor'</span><span class="p">,</span>
+        <span class="na">taxId</span><span class="p">:</span> <span class="s1">'e422'</span><span class="p">});</span>
+    <span class="p">},</span> <span class="nx">time</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">showUsers</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span><span class="p">{</span>
+    <span class="nx">addUser</span><span class="p">(</span><span class="mi">2500</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`All users:\n </span><span class="p">${</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">userData</span><span class="p">)}</span><span class="s2">`</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">showUsers</span><span class="p">();</span></code></pre></figure>
+ 
+</p>
+<p>
+We execute the snippet above,  and the function <em>showUsers</em> is called. Oh yeah!, we expect the output of <em>showUsers</em> to give us an updated version of <em>userData</em> since we are calling <em>addUser</em>  before displaying the updated <em>userData</em>. Run the snippet above in your browser console. 
+</p>
+<h5 class="paragraphy-heading">The result after we run the snippet above</h5>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html">All users:
+[{"name":"Karl Max","age":32,"profession":"teacher","taxId":"e312"}]</code></pre></figure>
+
+<p>There is a problem here, we need to be able to delay the execution of some section of our code if this section is dependent on some execution whose result might not be immediately available. <em>showUsers</em> excutes the console statement without regards to whether <em>addUser</em> is done adding the new user data. However, <em>showUsers</em> is unable to get the updated data from <em>addUser</em> at the moment the console statement is being executed.</p>
+<p>Initially, Callbacks were the solution considered to ensure that dependency on some section of code doesn't cause a function to yield unexpected results. We pass the dependent function as a parameter to the function it depends on, then we call the dependent function inside the function it depends on. This is illustrated below.</p>
+
+<p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">let</span> <span class="nx">userData</span> <span class="o">=</span> <span class="p">[{</span><span class="na">name</span><span class="p">:</span> <span class="s1">'Karl Max'</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="na">profession</span><span class="p">:</span><span class="s1">'teacher'</span><span class="p">,</span> <span class="na">taxId</span><span class="p">:</span> <span class="s1">'e312'</span> <span class="p">}];</span>
+
+<span class="cm">/* we pass the dependent function
+to the function it depends on */</span>
+<span class="kd">const</span> <span class="nx">addUser</span> <span class="o">=</span> <span class="p">(</span><span class="nx">time</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> 
+    <span class="nx">setTimeout</span><span class="p">(()</span><span class="o">=&gt;</span><span class="p">{</span> 
+        <span class="nx">userData</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="na">name</span><span class="p">:</span> <span class="s1">'Johhn Doe '</span><span class="p">,</span> 
+        <span class="na">age</span><span class="p">:</span> <span class="mi">44</span><span class="p">,</span> <span class="na">profession</span><span class="p">:</span> <span class="s1">'doctor'</span><span class="p">,</span>
+        <span class="na">taxId</span><span class="p">:</span> <span class="s1">'e422'</span><span class="p">});</span>
+
+        <span class="cm">/* we call the dependent function inside the function it depends on */</span>
+	<span class="nx">callback</span><span class="p">();</span> 
+
+    <span class="p">},</span> <span class="nx">time</span><span class="p">);</span> 
+<span class="p">}</span> 
+ 
+<span class="kd">const</span> <span class="nx">showUsers</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span><span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`All users:\n </span><span class="p">${</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">userData</span><span class="p">)}</span><span class="s2">`</span><span class="p">);</span> 
+<span class="p">}</span>
+<span class="nx">addUser</span><span class="p">(</span><span class="mi">2500</span><span class="p">,</span> <span class="nx">showUsers</span><span class="p">);</span></code></pre></figure>
+
+</p>
+<h5 class="paragraphy-heading">The result after we run the snippet above</h5>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html">All users:
+ [{"name":"Karl Max","age":32,"profession":"teacher","taxId":"e312"},{"name":"Johhn Doe ","age":44,"profession":"doctor","taxId":"e422"}]</code></pre></figure>
+
+<p>
+ This becomes tedious to maintain and can be difficult to read or understand when several levels of callback nesting are required. This was the case when Javascript ES5 was the best acceptable standard. 
+</p>
+<p>
+ES6/ES2015 came with Promises, an alternative to callbacks which made it more comfortable to write maintainable   chained(dependent) asynchronous flows such as our illustration without running into the problem nested callbacks causes.
+Promises ensure callbacks will not be called until the current execution has completed. There was also an improvement in the usage of mulitple callbacks which saved us the stress of callback nesting.
+</p>
+
+<h5 class="paragraphy-heading">Re-writing our illustration with Promises goes thus: </h5>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">let</span> <span class="nx">userData</span> <span class="o">=</span> <span class="p">[{</span><span class="na">name</span><span class="p">:</span> <span class="s1">'Karl Max'</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="na">profession</span><span class="p">:</span><span class="s1">'teacher'</span><span class="p">,</span> <span class="na">taxId</span><span class="p">:</span> <span class="s1">'e312'</span> <span class="p">}];</span>
+<span class="kd">const</span> <span class="nx">addUser</span> <span class="o">=</span>  <span class="p">(</span><span class="nx">time</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="nx">resolve</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">userData</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="na">name</span><span class="p">:</span> <span class="s1">'Johhn Doe '</span><span class="p">,</span><span class="na">age</span><span class="p">:</span> <span class="mi">44</span><span class="p">,</span>
+        <span class="na">profession</span><span class="p">:</span> <span class="s1">'doctor'</span><span class="p">,</span>
+        <span class="na">taxId</span><span class="p">:</span><span class="s1">'e422'</span><span class="p">});</span>
+      <span class="nx">resolve</span> <span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">userData</span><span class="p">));</span>
+    <span class="p">},</span> <span class="nx">time</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">showUsers</span> <span class="o">=</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span><span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`All users:\n </span><span class="p">${</span><span class="nx">res</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span> 
+<span class="p">}</span>
+
+<span class="nx">addUser</span><span class="p">(</span><span class="mi">2500</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">showUsers</span><span class="p">(</span><span class="nx">res</span><span class="p">));</span></code></pre></figure>
+
+<h5 class="paragraphy-heading">The result after we run the snippet above</h5>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html">All users:
+ [{"name":"Karl Max","age":32,"profession":"teacher","taxId":"e312"},{"name":"Johhn Doe ","age":44,"profession":"doctor","taxId":"e422"}]</code></pre></figure>
+
+<p>Our code looks cleaner and more readable with the introduction of Promises. Also adding multiple callbacks becomes easier with the chaining feature of promises, which is applied by appending <em>.then(callbackFunction)</em> for each callbacks after the function that returns a promise as thus: <em>addUser().then(callback).then(callback)</em> </p>
+<p>A flaw with promises is that it becomes difficult to maintain multiple callbacks. This results from several expressions and nesting of callbacks.</p>
+
+<h3 class="sub-section-title">Meet Javascript Async-Await</h3>
+<p>Introduced as part of ES2017 Implementation is the use of <em>Async</em> functions which allows us to write asynchronous-based code to be readable as though they are synchrounous code. A base syntax to use the Async-await feature is illustrated thus:  </p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="k">async</span> <span class="kd">function</span> <span class="nx">tryAsync</span><span class="p">(){</span>
+
+    <span class="cm">/* aPromiseFunction() is a function that returns a promise */</span>
+    <span class="kd">const</span> <span class="nx">valueFromPromise</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">aPromiseFunction</span><span class="p">();</span> 
+<span class="p">}</span></code></pre></figure>
+
+<p>The <em>async</em> and <em>await</em> keywords work together in such a way that placing <em>async</em> before any <em>function</em> declaration defines the function as an asynchronous function. Regardless of whether the <em>await</em> is used inside an async function, the async function will always return a promise. The promise returned resolves with whatever the async function returns.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="k">async</span> <span class="kd">function</span> <span class="nx">tryAsync</span><span class="p">(){</span>
+
+    <span class="cm">/* aPromiseFunction() is a function that returns a promise */</span>
+    <span class="kd">const</span> <span class="nx">valueFromPromise</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">aPromiseFunction</span><span class="p">();</span>  
+    <span class="k">return</span> <span class="s1">'value from async'</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//Arrow functions version</span>
+<span class="kd">const</span> <span class="nx">tryAsync</span> <span class="o">=</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span><span class="p">{</span>
+
+    <span class="cm">/* aPromiseFunction() is a function  that returns a promise */</span>
+    <span class="kd">const</span> <span class="nx">valueFromPromise</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">aPromiseFunction</span><span class="p">();</span> 
+    <span class="k">return</span> <span class="s1">'value from async'</span><span class="p">;</span>
+<span class="p">};</span></code></pre></figure>
+
+<p> <em>tryAsync()</em> returns a promise which is fulfilled with <em>'value from async'</em>. The execution of an async function is paused whenever an <em>await</em> expression is encountered till the promise in the await expression has been resolved.</p>
+<h5 class="paragraphy-heading">Re-writing our userData illustration with Async-Await goes thus: </h5>
+<iframe height="300" scrolling="no" title="The art of Javascript Async-Await" src="//codepen.io/moshoodtemitope/embed/bvdVWJ/?height=300&amp;theme-id=32804&amp;default-tab=js,result&amp;embed-version=2" frameborder="no" allowtransparency="true" allowfullscreen="true" style="width: 100%;">See the Pen <a href="https://codepen.io/moshoodtemitope/pen/bvdVWJ/">The art of Javascript Async-Await</a> by Moshood Temitope (<a href="https://codepen.io/moshoodtemitope">@moshoodtemitope</a>) on <a href="https://codepen.io">CodePen</a>.
+</iframe>
+<p>The usage of Async-Await provides a neatly refined version of the <em>addUser</em> illustration, the promise returned by <em>addUser()</em> is waited for with <em>await addUser()</em> inside the <em>showUsers()</em> function. Also, because <em>showUsers()</em> returns a promise which resolves to a return value of: ( JSON.stringify(userData, null, ' ') ), we can chain and easily maintain more callbacks. </p>
+<p> <h5 class="paragraphy-heading">Parallelism with Async-Await</h5></p>
+<p>Considering the following snippet, we want to await two asynchronous function calls at the same time.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="k">async</span> <span class="kd">function</span> <span class="nx">twoAsyncs</span><span class="p">(){</span>
+
+    <span class="cm">/* awaiting a promise from someAsync for 1000ms */</span>
+    <span class="kd">const</span> <span class="nx">someAsyncValue</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">someAsync</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span> 
+
+    <span class="cm">/* awaiting another promise from anotherAsync for 1000ms */</span>
+    <span class="kd">const</span> <span class="nx">anotherAsyncvalue</span><span class="o">=</span> <span class="kr">await</span> <span class="nx">anotherAsync</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nx">someAsyncValue</span> <span class="o">+</span> <span class="nx">anotherAsyncvalue</span><span class="p">;</span> 
+<span class="p">}</span></code></pre></figure>
+
+<p>The snippet above will need a total of 2000ms to return the value expected. However, we can save time by making the two asynchronous function calls at the same time. Take a look at the refined version of the <em>twoAsyncs()</em> function below, we await the return value of the two functions togther at the same time in the return statement.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="k">async</span> <span class="kd">function</span> <span class="nx">twoAsyncs</span><span class="p">(){</span>
+    <span class="kd">const</span> <span class="nx">someAsyncValue</span> <span class="o">=</span>  <span class="nx">someAsync</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">//  execute promise from someAsync for 1000ms</span>
+    <span class="kd">const</span> <span class="nx">anotherAsyncvalue</span> <span class="o">=</span>  <span class="nx">anotherAsync</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">//execute promise from anotherAsync for 1000ms</span>
+
+    <span class="c1">// await the return values of someAsync() and anotherAsync() for just 1000ms </span>
+    <span class="k">return</span> <span class="kr">await</span> <span class="nx">someAsyncValue</span> <span class="o">+</span> <span class="kr">await</span> <span class="nx">anotherAsyncvalue</span><span class="p">;</span>  
+<span class="p">}</span></code></pre></figure>
+
+<h5 class="paragraphy-heading">An alternative to the parallelism above is by separately listing references to the functions to be awaited </h5>
+<p>The references to the functions to be awaited are listed in the sequence with which we wish to await them. Execution would be paused the moment the first await statemtent is encountered till all the await statements have executed.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="k">async</span> <span class="kd">function</span> <span class="nx">twoAsyncs</span><span class="p">(){</span>
+    <span class="kd">const</span> <span class="nx">someAsyncValue</span> <span class="o">=</span>  <span class="nx">someAsync</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">//  execute promise from someAsync for 1000ms</span>
+    <span class="kd">const</span> <span class="nx">anotherAsyncvalue</span> <span class="o">=</span>  <span class="nx">anotherAsync</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">//execute promise from anotherAsync for 1000ms</span>
+
+    <span class="c1">// await the return values of someAsync() and anotherAsync() for just 1000ms</span>
+    <span class="kr">await</span> <span class="nx">someAsyncValue</span><span class="p">;</span>
+    <span class="kr">await</span> <span class="nx">anotherAsyncvalue</span><span class="p">;</span>
+     
+    <span class="k">return</span>  <span class="nx">someAsyncValue</span> <span class="o">+</span> <span class="nx">anotherAsyncvalue</span><span class="p">;</span>  
+<span class="p">}</span></code></pre></figure>
+
+<h5 class="paragraphy-heading">Another approach to the parallelism illustration is the use of destructuring assignment to unpack values from a Promise.all() array</h5>
+<p>This allows us to take advantage of Javascript destructuring to get return value of all awaited functions provided the   promise-based functions are independent of eachother. </p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="k">async</span> <span class="kd">function</span> <span class="nx">twoAsyncs</span><span class="p">(){</span>
+    <span class="kd">const</span> <span class="p">[</span><span class="nx">someAsyncValue</span><span class="p">,</span> <span class="nx">anotherAsyncvalue</span> <span class="p">]</span> <span class="o">=</span> <span class="kr">await</span> <span class="nb">Promise</span><span class="p">.</span><span class="nx">all</span><span class="p">([</span>
+        <span class="nx">someAsync</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span>
+        <span class="nx">anotherAsync</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="p">])</span> 
+    <span class="cm">/* value of resolved promises in someAsync() and anotherAsync() 
+    are stored in someAsyncValue and anotherAsyncvalue respectively */</span>
+
+    <span class="k">return</span>  <span class="nx">someAsyncValue</span> <span class="o">+</span> <span class="nx">anotherAsyncvalue</span><span class="p">;</span>  
+<span class="p">}</span></code></pre></figure>
+
+<h5 class="paragraphy-heading">Error handling in Async-Await functions</h5>
+<p>It is a great practice to take care of errors that could arise from failures in the promises that are being awaited. This errors can be handled by wrapping the statements inside an async function in a pair <em>try</em> and <em>catch</em> blocks as illustrated below </p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="k">async</span> <span class="kd">function</span> <span class="nx">twoAsyncs</span><span class="p">(){</span>
+    <span class="k">try</span><span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">someAsyncValue</span> <span class="o">=</span>  <span class="kr">await</span> <span class="nx">someAsync</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">//  execute promise from someAsync for 1000ms</span>
+        
+        <span class="k">return</span>  <span class="nx">someAsyncValue</span><span class="p">;</span>  
+    <span class="p">}</span>
+    <span class="k">catch</span><span class="p">(</span><span class="nx">errResponse</span><span class="p">){</span> <span class="c1">// how the error should be handled is stated inside this block</span>
+        
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`There was an error with the result : </span><span class="p">${</span><span class="nx">errResponse</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p class="emphasis">The different approaches shared in the illustrations above are applicable to different use cases. Some might be inapplicable to some use cases, alternative approaches stated can be implemented in these cases.</p>
+
+      </div>
+
+      
+      <div class="say-hello-wrap">
+        <div class="comments-allowed">
+          Enjoy this post? Kindly share with the community <img src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCA1MTIuMDAxIDUxMi4wMDEiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMi4wMDEgNTEyLjAwMTsiIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSI1MTJweCIgaGVpZ2h0PSI1MTJweCI+CjxjaXJjbGUgc3R5bGU9ImZpbGw6I0Y3QjIzOTsiIGN4PSIyNTYuMDA0IiBjeT0iMjU2LjAwNCIgcj0iMjQ2Ljg1NSIvPgo8Zz4KCTxwYXRoIHN0eWxlPSJmaWxsOiNFMDlCMkQ7IiBkPSJNMTI2LjMwNiwzODUuNjk0Yy04OC44MDEtODguODAyLTk1Ljc5OC0yMjguNDI2LTIwLjk5OC0zMjUuMjQyICAgQzk3LjAyMyw2Ni44NTMsODkuMDUxLDczLjg1LDgxLjQ1LDgxLjQ1Yy05Ni40MDEsOTYuNDAxLTk2LjQwMSwyNTIuNjk4LDAsMzQ5LjA5OXMyNTIuNjk4LDk2LjQwMSwzNDkuMDk5LDAgICBjNy41OTktNy41OTksMTQuNTk3LTE1LjU3MywyMC45OTktMjMuODU4QzM1NC43MzMsNDgxLjQ5MiwyMTUuMTA4LDQ3NC40OTQsMTI2LjMwNiwzODUuNjk0eiIvPgoJPHBhdGggc3R5bGU9ImZpbGw6I0UwOUIyRDsiIGQ9Ik0yNTYuMDAxLDQwMC44MzFjLTE0Ljc1NiwwLTI5LjUwNS0yLjAxLTQzLjg1LTYuMDMxYy00Ljg2NS0xLjM2NC03LjcwNC02LjQxNC02LjM0LTExLjI4MSAgIGMxLjM2NC00Ljg2NSw2LjQxNC03LjcwNiwxMS4yOC02LjM0YzI1LjQ1NSw3LjEzNyw1Mi4zNjYsNy4xMzcsNzcuODIxLDBjNC44NjktMS4zNjEsOS45MTYsMS40NzUsMTEuMjgsNi4zNCAgIHMtMS40NzUsOS45MTYtNi4zNCwxMS4yOEMyODUuNTA5LDM5OC44MiwyNzAuNzUxLDQwMC44MzEsMjU2LjAwMSw0MDAuODMxeiIvPgo8L2c+CjxwYXRoIGQ9Ik0yNTYuMDAxLDBDMTE0Ljg0MSwwLDAsMTE0Ljg0MSwwLDI1Ni4wMDFzMTE0Ljg0MSwyNTYuMDAxLDI1Ni4wMDEsMjU2LjAwMVM1MTIuMDAxLDM5Ny4xNiw1MTIuMDAxLDI1Ni4wMDEgIEM1MTIsMTE0Ljg0MSwzOTcuMTYsMCwyNTYuMDAxLDB6IE0yNTYuMDAxLDQ5My43MDFjLTEzMS4wNjksMC0yMzcuNzAyLTEwNi42MzEtMjM3LjcwMi0yMzcuN1MxMjQuOTMyLDE4LjI5OSwyNTYuMDAxLDE4LjI5OSAgczIzNy43MDIsMTA2LjYzMiwyMzcuNzAyLDIzNy43QzQ5My43MDEsMzg3LjA3LDM4Ny4wNjgsNDkzLjcwMSwyNTYuMDAxLDQ5My43MDF6Ii8+CjxwYXRoIGQ9Ik0zODAuMTAxLDI5NS43MjNjLTY4LjQzMiw2OC40My0xNzkuNzc4LDY4LjQyOC0yNDguMjAzLDBjLTMuNTc0LTMuNTczLTkuMzY3LTMuNTczLTEyLjk0LDAgIGMtMy41NzMsMy41NzMtMy41NzMsOS4zNjcsMCwxMi45MzljMzcuNzg4LDM3Ljc4Niw4Ny40MDUsNTYuNjczLDEzNy4wNDIsNTYuNjczYzQ5LjYyMywwLDk5LjI2My0xOC44OTYsMTM3LjA0Mi01Ni42NzMgIGMzLjU3My0zLjU3MywzLjU3My05LjM2NywwLTEyLjkzOUMzODkuNDY4LDI5Mi4xNSwzODMuNjc2LDI5Mi4xNDksMzgwLjEwMSwyOTUuNzIzeiIvPgo8cGF0aCBkPSJNMTQ2LjcyMywyMzEuOTc0YzE4LjY2NiwwLDMzLjg1Mi0xNS4xODYsMzMuODUyLTMzLjg1MnMtMTUuMTg2LTMzLjg1Mi0zMy44NTItMzMuODUycy0zMy44NTIsMTUuMTg2LTMzLjg1MiwzMy44NTIgIFMxMjguMDU4LDIzMS45NzQsMTQ2LjcyMywyMzEuOTc0eiIvPgo8cGF0aCBkPSJNMzY1LjI3NSwxNjQuMjdjLTE4LjY2NiwwLTMzLjg1MiwxNS4xODYtMzMuODUyLDMzLjg1MnMxNS4xODYsMzMuODUyLDMzLjg1MiwzMy44NTJzMzMuODUyLTE1LjE4NiwzMy44NTItMzMuODUyICBTMzgzLjk0MiwxNjQuMjcsMzY1LjI3NSwxNjQuMjd6Ii8+CjxnPgoJPGNpcmNsZSBzdHlsZT0iZmlsbDojRkZGRkZGOyIgY3g9IjE1NS45NjkiIGN5PSIxOTMuNTA3IiByPSI5LjE1Ii8+Cgk8Y2lyY2xlIHN0eWxlPSJmaWxsOiNGRkZGRkY7IiBjeD0iMzc0LjMzOCIgY3k9IjE5My41MDciIHI9IjkuMTUiLz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K" />
+        </div>
+        <div class="social-share">
+            <span>Share &rarr;</span> 
+          
+          <!--[if lt IE 9]
+          <a class="twitter-share-button"  href="https://twitter.com/intent/tweet?text=The art of Javascript Async-Await  by 
+          @moreshud15 -&url=http://localhost:4443/blog/art-of-async-await" rel="nofollow" target="_blank" title="Share on Twitter">
+            <i class="fa fa-twitter" aria-hidden="true"></i>
+          </a>
+          <a href="https://facebook.com/sharer.php?u=http://localhost:4443/blog/art-of-async-await" class="fb-button" rel="nofollow" target="_blank" title="Share on Facebook">
+            <i class="fa fa-facebook-f" aria-hidden="true"></i>
+          </a>
+          <![endif]-->
+          <a href="https://twitter.com/intent/tweet?text=The art of Javascript Async-Await  by @moreshud15 -&url=http://localhost:4443/blog/art-of-async-await" rel="nofollow" target="_blank" title="Share on Twitter" class="twitter-share-button svg-icon">
+            <svg viewBox="0 0 512 512">
+              <path fill="#ffffff" d="M419.6 168.6c-11.7 5.2-24.2 8.7-37.4 10.2 13.4-8.1 23.8-20.8 28.6-36 -12.6 7.5-26.5 12.9-41.3 15.8 -11.9-12.6-28.8-20.6-47.5-20.6 -42 0-72.9 39.2-63.4 79.9 -54.1-2.7-102.1-28.6-134.2-68 -17 29.2-8.8 67.5 20.1 86.9 -10.7-0.3-20.7-3.3-29.5-8.1 -0.7 30.2 20.9 58.4 52.2 64.6 -9.2 2.5-19.2 3.1-29.4 1.1 8.3 25.9 32.3 44.7 60.8 45.2 -27.4 21.4-61.8 31-96.4 27 28.8 18.5 63 29.2 99.8 29.2 120.8 0 189.1-102.1 185-193.6C399.9 193.1 410.9 181.7 419.6 168.6z"/>
+            </svg>
+          </a>
+          
+          
+          <a href="https://facebook.com/sharer.php?u=http://localhost:4443/blog/art-of-async-await" class="fb-button svg-icon" rel="nofollow" target="_blank" title="Share on Facebook">
+            <svg viewBox="0 0 512 512">
+              <path fill="#FFFFFF" d="M211.9 197.4h-36.7v59.9h36.7V433.1h70.5V256.5h49.2l5.2-59.1h-54.4c0 0 0-22.1 0-33.7 0-13.9 2.8-19.5 16.3-19.5 10.9 0 38.2 0 38.2 0V82.9c0 0-40.2 0-48.8 0 -52.5 0-76.1 23.1-76.1 67.3C211.9 188.8 211.9 197.4 211.9 197.4z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="navigate-between-pages">
+        
+        
+      </div>
+      
+      <!-- Begin MailChimp Signup Form -->
+
+    <div id="mc_embed_signup">
+        <!-- <form action="https://topemoshood.us17.list-manage.com/subscribe/post?u=f7c61472a9abf52dcb4f34427&amp;id=8957dfa1fa" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate> -->
+        <form action="https://topemoshood.us17.list-manage.com/subscribe/post?u=f7c61472a9abf52dcb4f34427&amp;id=8957dfa1fa" method="post"
+            id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+            <div id="mc_embed_signup_scroll">
+                <h2>Subscribe to the newsletter</h2>
+                <div class="newsletter-help-text">
+                    You will only receive latest Front End articles written by me in your email
+                </div>
+                <div class="mc-field-group">
+                    <input placeholder="Type your email" type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+                </div>
+                <div class="mc-field-group">
+                    <input placeholder="Type your first name" type="text" value="" name="FNAME" class="" id="mce-FNAME">
+                </div>
+                <div style="position: absolute; left: -5000px;" aria-hidden="true">
+                    <input type="text" name="b_ae7d17f409816dbb38581c256_01ef89904b" tabindex="-1" value="">
+                </div>
+    
+                <div class="clear">
+                    <input type="submit" value="Subscribe" id="mc-embedded-subscribe" class="button">
+                </div>
+                <div id="mce-responses" class="clear">
+                    <div class="response" id="mce-error-response" style="display:none"></div>
+                    <div class="response" id="mce-success-response" style="display:none"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+<script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script>
+<script type='text/javascript'>
+    (function ($) {
+    window.fnames = new Array();
+        window.ftypes = new Array();
+        fnames[0] = 'EMAIL';
+        ftypes[0] = 'email';
+        fnames[1] = 'FNAME';
+        ftypes[1] = 'text';
+        fnames[2] = 'LNAME';
+        ftypes[2] = 'text';
+        fnames[3] = 'BIRTHDAY';
+        ftypes[3] = 'birthday';
+    }(jQuery)); var $mcj = jQuery.noConflict(true);
+</script>
+<!--End mc_embed_signup-->
+      <footer class="">
+        <div class="post-footer">
+          <div class="author-photo">
+              <img alt="" src="/assets/images/mrmosh.jpg">
+          </div>
+        
+          <div class="author-meta-info">
+            <h3 class="name-of-author"><a href="/about">Moshood Temitope</a></h3>
+            <div class="who-is-author">
+              <span class="author-job-roles">FE Engineer</span>
+              <span class="job-separator">&middot;</span>
+              <span class="author-job-roles">UI Designer</span>
+              <span class="job-separator">&middot;</span>  
+              <span class="author-job-roles">UX Researcher</span>
+            </div>
+          </div>
+        </div>
+        <div class="site-footer">
+          &copy; 2018. All rights reserved
+          <a href="/contact"> Contact me</a>
+        </div>
+      </footer>
+       
+        <div id="disqus_thread"></div>
+        <script>
+
+        /**
+        *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+        *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+        /*
+        var disqus_config = function () {
+        this.page.url = http://localhost:4443/blog/art-of-async-await;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = /blog/art-of-async-await; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+        */
+        (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://https-moshoodtemitope-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+        })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+    
+    </section>
+    
+
+    
+    
+    </body>
+    </html>
+

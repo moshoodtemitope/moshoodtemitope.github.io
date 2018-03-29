@@ -1,0 +1,22 @@
+theme: jekyll-theme-cayman
+title: Moshood Temitope
+description: Sharing knowledge about Front End development. All articles and researches are written by Moshood Temitope, Front End Engineer, UI Designer, UX Researcher
+permalink: /writing/:year/:month/:day/:title
+twitter:
+  username: moreshud15
+github_username: moshoodtemitope
+plugins:
+  - jekyll-paginate
+paginate: 4
+paginate_path: "/page-:num/"
+
+baseurl: "/amp"
+destination:   _site/amp
+layouts_dir:   ./_layouts-amp
+
+defaults:
+  -
+    scope:
+      path: "_posts"
+    values:
+      layout: "default"
